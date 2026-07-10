@@ -33,4 +33,6 @@ streamlit run app.py
 - タイトル（`st.title`）
 - タスク入力欄（`st.text_input` + `key`）
 - 追加ボタン（`st.button`）
-- `st.session_state` で保持するタスクリスト表示
+- タスクごとの完了チェック（`st.checkbox`）
+- タスクごとの削除ボタン（`st.button`）
+- `st.session_state` で保持するタスクリストの状態更新
