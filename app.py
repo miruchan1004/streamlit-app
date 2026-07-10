@@ -64,27 +64,45 @@ if st.button("追加"):
         st.warning("タスクを入力してから追加してください。")
 
 st.subheader("タスクリスト")
+filter_option = st.radio(
+    "表示フィルター",
+    ("すべて", "未完了", "完了"),
+    horizontal=True,
+)
 
 if st.session_state.tasks:
+    filtered_tasks: list[tuple[int, dict[str, object]]] = []
+
     for index, task in enumerate(st.session_state.tasks):
-        col_check, col_delete = st.columns([6, 1])
         is_done = task.get("done", False)
+        if filter_option == "未完了" and is_done:
+            continue
+        if filter_option == "完了" and not is_done:
+            continue
+        filtered_tasks.append((index, task))
 
-        with col_check:
-            checked = st.checkbox(
-                task["text"],
-                value=is_done,
-                key=f"check_{index}",
-            )
-            if checked != is_done:
-                st.session_state.tasks[index]["done"] = checked
-                save_tasks(st.session_state.tasks)
-                st.rerun()
+    if filtered_tasks:
+        for index, task in filtered_tasks:
+            col_check, col_delete = st.columns([6, 1])
+            is_done = task.get("done", False)
 
-        with col_delete:
-            if st.button("削除", key=f"delete_{index}"):
-                st.session_state.tasks.pop(index)
-                save_tasks(st.session_state.tasks)
-                st.rerun()
+            with col_check:
+                checked = st.checkbox(
+                    task["text"],
+                    value=is_done,
+                    key=f"check_{index}",
+                )
+                if checked != is_done:
+                    st.session_state.tasks[index]["done"] = checked
+                    save_tasks(st.session_state.tasks)
+                    st.rerun()
+
+            with col_delete:
+                if st.button("削除", key=f"delete_{index}"):
+                    st.session_state.tasks.pop(index)
+                    save_tasks(st.session_state.tasks)
+                    st.rerun()
+    else:
+        st.info("選択中のフィルターに一致するタスクはありません。")
 else:
     st.info("まだタスクはありません。")
