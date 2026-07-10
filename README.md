@@ -1,6 +1,6 @@
 # Streamlit TODO App
 
-Issue #1 の要件に沿って、Streamlit のセットアップと基本画面の表示を行う最小構成です。
+Issue #2 の要件に沿って、`st.session_state` を使ったタスク追加と一覧表示を行う構成です。
 
 ## セットアップ手順
 
@@ -31,5 +31,6 @@ streamlit run app.py
 ## 画面の内容
 
 - タイトル（`st.title`）
-- タスク入力欄（`st.text_input`）
+- タスク入力欄（`st.text_input` + `key`）
 - 追加ボタン（`st.button`）
+- `st.session_state` で保持するタスクリスト表示
